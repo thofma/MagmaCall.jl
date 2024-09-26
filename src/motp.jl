@@ -108,6 +108,9 @@ function magotp_start()
         putcmd(p, varname(MAGOTP_MAG_SERVER_SOCKET), " := Socket(:LocalHost:=\"localhost\"); SocketInformation(", varname(MAGOTP_MAG_SERVER_SOCKET), ")[2]", err=true)
         port = readtotoken(Int, p, missing)
         checkerr(p)
+        # Magma 2.28 uses 0.3, but the code here wants 0.1
+        putcmd(p, "SetMOTPVersion(", "\"0.1\"", ")", err=true)
+        checkerr(p)
         # magma: wait for a connection from julia
         putcmd(p, varname(MAGOTP_MAG_CLIENT_SOCKET), " := WaitForConnection(", varname(MAGOTP_MAG_SERVER_SOCKET), ")", err=true)
         # julia: connect to the socket
